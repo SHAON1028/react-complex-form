@@ -109,6 +109,13 @@ const EmployeeRegistrationForm3 = () => {
     name: "workHistories",
   });
 
+  // skill fields
+
+  const skillField = useFieldArray({
+    control: form.control,
+    name: "skills",
+  })
+
   const onSubmit = (data: FormType) => {
     console.log(data);
     form.reset();
