@@ -1,21 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Trash } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-
-
 
 // Define the schema using Zod
 const FormSchema1 = z.object({
@@ -101,6 +116,7 @@ const EmployeeRegistrationForm3 = () => {
       department: "engineering",
       salary: 20000,
       terms: false,
+      skills:[{skill:"skill1"},{skill:"skill2"},{skill:"skill3"}],
     },
   });
 
@@ -114,7 +130,7 @@ const EmployeeRegistrationForm3 = () => {
   const skillField = useFieldArray({
     control: form.control,
     name: "skills",
-  })
+  });
 
   const onSubmit = (data: FormType) => {
     console.log(data);
@@ -396,7 +412,7 @@ const EmployeeRegistrationForm3 = () => {
             )}
           />
         </div>
-{/* work history */}
+        {/* work history */}
         <div className="space-y-8">
           {fields.map((history, index) => (
             <div key={history.id} className="space-y-8">
@@ -555,7 +571,7 @@ const EmployeeRegistrationForm3 = () => {
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0">
               <FormControl>
-                <Checkbox  
+                <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
@@ -571,6 +587,25 @@ const EmployeeRegistrationForm3 = () => {
         />
         <div>
           <Label>Skills</Label>
+          <Button onClick={() => skillField.append({ skill: "" })}>Add Skill</Button>
+          {skillField.fields.map((skill, index) => {
+            return (
+              <FormField
+                control={form.control}
+                name={`skills.${index}.skill`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Skill</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+
+                    <Button variant="outline" onClick={() => skillField.remove(index)}><Trash/></Button>
+                  </FormItem>
+                )}
+              />
+            );
+          })}
         </div>
         <Button type="submit">Submit</Button>
       </form>
